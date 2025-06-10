@@ -1,87 +1,102 @@
-# Welcome to React Router!
+# My Portfolio
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Hi👋. I'm David Emmanuel (David3Emmanuel), a dedicated developer showcasing my skills, projects, and professional journey.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## About Me
 
-## Features
+I'm a Systems Engineering student and passionate Full-Stack Developer focused on creating elegant solutions to complex problems. Based in Lagos, Nigeria, I'm currently pursuing my B.Eng. at the University of Lagos while working on exciting web development projects. I'm experienced with modern web technologies, game development, and have a strong foundation in data structures and algorithms.
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## Skills
 
-## Getting Started
+- 💻 **Languages:** Python, JavaScript, TypeScript, C#
+- 🎨 **Frontend:** NextJS, React, HTML/CSS
+- 🔧 **Backend:** NestJS, NodeJS, Express, MongoDB, Firebase, SQL
+- 📱 **Web Development:** Responsive Design, API Integration, Full-Stack Development
+- 🎮 **Game Development:** Unity
 
-### Installation
+## Projects
 
-Install the dependencies:
+Here's a collection of my best work, demonstrating my capabilities with various technologies:
 
-```bash
-npm install
-```
+### PlayCINE
 
-### Development
+A movie watchlist and streaming service built as a solo project in 3 weeks for my HatchDev final project.
 
-Start the development server with HMR:
+- **Demo:** [Live Demo](https://movie-app-frontend-zw19.onrender.com)
+- **Tech Stack:** NextJS, NestJS, MongoDB, TMDb API
+- **Features:** Includes frontend, backend, and a specialized streaming server
 
-```bash
-npm run dev
-```
+### CLIMA
 
-Your application will be available at `http://localhost:5173`.
+A weather map web application developed in collaboration with a partner.
 
-## Building for Production
+- **Demo:** [Live Demo](https://weather-hatchdev.vercel.app)
+- **Tech Stack:** React, MapBox, WeatherAPI
+- **Timeline:** Completed in 7 days for a HatchDev submission
 
-Create a production build:
+### FUTA Sec Student Body Election Website
 
-```bash
-npm run build
-```
+A scalable election website for FUTA Secondary School designed to handle 2,000–4,000 voters annually.
 
-## Deployment
+- **Tech Stack:** NestJS, MongoDB, Brevo Email API
+- **Role:** Backend Developer
 
-### Docker Deployment
+## Experience
 
-To build and run using Docker:
+### Delta State Government Farm Trainee Program | Full-Stack Developer | January 2025 – Present
 
-```bash
-docker build -t my-app .
+- Collaborating with the Delta State Government to improve agriculture in Delta State
+- Designing, creating, and managing two websites (admin portal for ministry and trainee portal)
+- Overseeing the development of mobile apps for trainees and supervisors
 
-# Run the container
-docker run -p 3000:3000 my-app
-```
+### Hairs by Solomon | Full-Stack Web Developer | September 2023 – November 2023
 
-The containerized application can be deployed to any platform that supports Docker, including:
+- Designed and managed an e-commerce website for a small business
+- Delivered project within 1 month through effective client communication
+- **Tech:** React, Express, Firebase
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+## Activities
 
-### DIY Deployment
+### HatchDev, NITHUB | Trainee | April 2024 – December 2024
 
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
+- Trained in Data Structures and Algorithms, React, NodeJS, Express, PostgreSQL
 
-Make sure to deploy the output of `npm run build`
+### GameUp Africa, Maliyo Games | Clan Lead | September 2024 – December 2024
 
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
+- Led a group within a game development bootcamp
+- Facilitated weekly meetings and coordinated with other leads 
 
-## Styling
+### The Data Community, UNILAG | Activity Manager | May 2024 – Present
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+- Organized monthly challenges for 200+ members
+- Facilitated the Data Mastery Series (100+ participants)
+- Managed a resource drive with ~100 PDFs in data, Python, and ML
+
+## Education
+
+### University of Lagos | B.Eng. Systems Engineering | 2023 – 2028
+
+- **GPA:** 4.97/5.00
+- **Relevant Coursework:** Statistics, System Design, Data Structures and Algorithms, Artificial Intelligence
+
+## Certifications & Training
+
+- HatchDev Training – NITHUB
+- GameUp Africa – Maliyo Games
+- PLP Academy – Power Learn Project
+- Digital For All Challenge – Tech4Dev
+
+## Contact
+
+I'm open to new opportunities and collaborations. Feel free to reach out through:
+
+- 📍 Lagos, Nigeria (Available to relocate)
+- 📞 +234 7012117811
+- ✉️ Email: [david3emmanuel@gmail.com](mailto:david3emmanuel@gmail.com)
+- 💻 GitHub: [David3Emmanuel](https://github.com/David3Emmanuel)
+- 🔗 LinkedIn: [David3Emmanuel](https://linkedin.com/in/David3Emmanuel)
+- 🐦 Twitter: [@David3Emmnauel](https://twitter.com/David3Emmnauel)
 
 ---
 
-Built with ❤️ using React Router.
+Built with ❤️ by David Emmanuel © 2025
