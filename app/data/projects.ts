@@ -2,6 +2,7 @@
 import playcineImage from '../assets/playcine.jpg'
 import climaImage from '../assets/clima.jpg'
 import futaElectionImage from '../assets/futa-election.jpg'
+import dataCommunityImage from '../assets/data-community.png'
 
 export interface ProjectData {
   title: string
@@ -16,6 +17,21 @@ export interface ProjectData {
 }
 
 export const projects: ProjectData[] = [
+  {
+    title: 'Data Community Anonymous',
+    description:
+      'An anonymous messaging platform for Game Night at the Data Community, UNILAG with message moderation capabilities.',
+    demo: 'https://data-community-anonymous.vercel.app',
+    github: 'https://github.com/data-community-anonymous',
+    techStack: ['Supabase', 'React', 'Vercel'],
+    features: [
+      'Anonymous message submission',
+      'Real-time message feed',
+      'Inappropriate content flagging system',
+      'Moderation of flagged messages',
+    ],
+    image: dataCommunityImage,
+  },
   {
     title: 'PlayCINE',
     description:
