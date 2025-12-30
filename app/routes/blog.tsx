@@ -3,11 +3,6 @@ import type { Route } from './+types/blog'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
-// Strapi API configuration
-// Use Vite's import.meta.env for environment variables
-const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337'
-const STRAPI_API_TOKEN = import.meta.env.VITE_STRAPI_API_TOKEN || ''
-
 // TypeScript interfaces for Strapi blog data
 interface StrapiImageFormat {
   url: string
@@ -71,6 +66,10 @@ interface StrapiResponse {
 
 // Fetch blog posts from Strapi API
 async function fetchBlogPosts(): Promise<BlogPost[]> {
+  // Get configuration server-side for security
+  const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337'
+  const STRAPI_API_TOKEN = import.meta.env.VITE_STRAPI_API_TOKEN || ''
+
   try {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
@@ -104,7 +103,8 @@ async function fetchBlogPosts(): Promise<BlogPost[]> {
 // Loader function to fetch data for the route
 export async function loader({}: Route.LoaderArgs) {
   const posts = await fetchBlogPosts()
-  return { posts }
+  const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337'
+  return { posts, strapiUrl: STRAPI_URL }
 }
 
 // Meta tags for the blog page
@@ -124,7 +124,7 @@ export function meta({}: Route.MetaArgs) {
     },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:creator', content: '@David3Emmnauel' },
+    { name: 'twitter:creator', content: '@David3Emmanuel' },
     { name: 'twitter:title', content: 'Blog - David Emmanuel' },
     {
       name: 'twitter:description',
@@ -136,7 +136,7 @@ export function meta({}: Route.MetaArgs) {
 
 // Blog component
 export default function Blog({ loaderData }: Route.ComponentProps) {
-  const { posts } = loaderData
+  const { posts, strapiUrl } = loaderData
 
   // Helper function to get image URL
   const getImageUrl = (post: BlogPost): string | null => {
@@ -146,12 +146,12 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
     // Try to get medium format, fall back to small, then original
     const formats = cover.attributes.formats
     if (formats?.medium?.url) {
-      return `${STRAPI_URL}${formats.medium.url}`
+      return `${strapiUrl}${formats.medium.url}`
     }
     if (formats?.small?.url) {
-      return `${STRAPI_URL}${formats.small.url}`
+      return `${strapiUrl}${formats.small.url}`
     }
-    return `${STRAPI_URL}${cover.attributes.url}`
+    return `${strapiUrl}${cover.attributes.url}`
   }
 
   // Helper function to format date
@@ -241,7 +241,7 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
                         <h2 className='text-2xl font-bold mb-3 text-white hover:text-blue-400 transition-colors'>
                           {post.attributes.title}
                         </h2>
-                        <p className='text-gray-400 mb-4 line-clamp-3'>
+                        <p className='text-gray-400 mb-4 overflow-hidden' style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
                           {description}
                         </p>
                         <Link
