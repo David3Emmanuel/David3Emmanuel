@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router'
 
 export default function Header() {
+  const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -30,37 +32,54 @@ export default function Header() {
       <div className='container mx-auto px-4'>
         <div className='flex items-center justify-between py-4'>
           <div className='flex items-center'>
-            <a href='#hero' className='text-2xl font-bold text-white'>
+            <Link to='/' className='text-2xl font-bold text-white'>
               David<span className='text-blue-500'>3Emmanuel</span>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <nav className='hidden md:flex items-center space-x-8'>
-            <a
-              href='#about'
+            {location.pathname === '/' ? (
+              <>
+                <a
+                  href='#about'
+                  className='text-gray-300 hover:text-blue-400 transition-colors'
+                >
+                  About
+                </a>
+                <a
+                  href='#skills'
+                  className='text-gray-300 hover:text-blue-400 transition-colors'
+                >
+                  Skills
+                </a>
+                <a
+                  href='#projects'
+                  className='text-gray-300 hover:text-blue-400 transition-colors'
+                >
+                  Projects
+                </a>
+                <a
+                  href='#experience'
+                  className='text-gray-300 hover:text-blue-400 transition-colors'
+                >
+                  Experience
+                </a>
+              </>
+            ) : (
+              <Link
+                to='/'
+                className='text-gray-300 hover:text-blue-400 transition-colors'
+              >
+                Home
+              </Link>
+            )}
+            <Link
+              to='/blog'
               className='text-gray-300 hover:text-blue-400 transition-colors'
             >
-              About
-            </a>
-            <a
-              href='#skills'
-              className='text-gray-300 hover:text-blue-400 transition-colors'
-            >
-              Skills
-            </a>
-            <a
-              href='#projects'
-              className='text-gray-300 hover:text-blue-400 transition-colors'
-            >
-              Projects
-            </a>
-            <a
-              href='#experience'
-              className='text-gray-300 hover:text-blue-400 transition-colors'
-            >
-              Experience
-            </a>
+              Blog
+            </Link>
             <a
               href='#contact'
               className='px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors'
@@ -113,34 +132,53 @@ export default function Header() {
       {isMenuOpen && (
         <nav className='md:hidden bg-gray-900 border-t border-gray-800 py-4'>
           <div className='container mx-auto px-4 flex flex-col space-y-4'>
-            <a
-              href='#about'
+            {location.pathname === '/' ? (
+              <>
+                <a
+                  href='#about'
+                  className='text-gray-300 hover:text-blue-400 transition-colors p-2'
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  About
+                </a>
+                <a
+                  href='#skills'
+                  className='text-gray-300 hover:text-blue-400 transition-colors p-2'
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Skills
+                </a>
+                <a
+                  href='#projects'
+                  className='text-gray-300 hover:text-blue-400 transition-colors p-2'
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Projects
+                </a>
+                <a
+                  href='#experience'
+                  className='text-gray-300 hover:text-blue-400 transition-colors p-2'
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Experience
+                </a>
+              </>
+            ) : (
+              <Link
+                to='/'
+                className='text-gray-300 hover:text-blue-400 transition-colors p-2'
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </Link>
+            )}
+            <Link
+              to='/blog'
               className='text-gray-300 hover:text-blue-400 transition-colors p-2'
               onClick={() => setIsMenuOpen(false)}
             >
-              About
-            </a>
-            <a
-              href='#skills'
-              className='text-gray-300 hover:text-blue-400 transition-colors p-2'
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Skills
-            </a>
-            <a
-              href='#projects'
-              className='text-gray-300 hover:text-blue-400 transition-colors p-2'
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Projects
-            </a>
-            <a
-              href='#experience'
-              className='text-gray-300 hover:text-blue-400 transition-colors p-2'
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Experience
-            </a>
+              Blog
+            </Link>
             <a
               href='#contact'
               className='inline-block px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors'
