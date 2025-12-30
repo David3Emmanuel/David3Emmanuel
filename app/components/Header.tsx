@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -61,6 +62,12 @@ export default function Header() {
             >
               Experience
             </a>
+            <Link
+              to='/blog'
+              className='text-gray-300 hover:text-blue-400 transition-colors'
+            >
+              Blog
+            </Link>
             <a
               href='#contact'
               className='px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors'
@@ -141,6 +148,13 @@ export default function Header() {
             >
               Experience
             </a>
+            <Link
+              to='/blog'
+              className='text-gray-300 hover:text-blue-400 transition-colors p-2'
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Blog
+            </Link>
             <a
               href='#contact'
               className='inline-block px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors'
