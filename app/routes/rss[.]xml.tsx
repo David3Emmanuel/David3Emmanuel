@@ -37,7 +37,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       <channel>
         <title>David Emmanuel's Blog</title>
         <link>${domain}</link>
-        <description>Life & Tech</description>
+        <description>Life &amp; Tech</description>
         <language>en-us</language>
         ${rssItems}
       </channel>
