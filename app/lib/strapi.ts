@@ -1,3 +1,5 @@
+import type { BlogPost, Category, Tag } from './types'
+
 const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337'
 
 interface StrapiResponse<T> {
@@ -25,14 +27,16 @@ export async function fetchBlogPosts(page = 1, pageSize = 12) {
   const response = await fetch(`${STRAPI_URL}/api/blog-posts?${params}`)
   if (!response.ok) throw new Error('Failed to fetch blog posts')
 
-  const json: StrapiResponse<any[]> = await response.json()
+  const json: StrapiResponse<BlogPost[]> = await response.json()
   return {
     posts: json.data,
     pagination: json.meta.pagination,
   }
 }
 
-export async function fetchBlogPostBySlug(slug: string) {
+export async function fetchBlogPostBySlug(
+  slug: string,
+): Promise<BlogPost | null> {
   const params = new URLSearchParams({
     'filters[slug][$eq]': slug,
     'populate[0]': 'coverImage',
@@ -43,11 +47,13 @@ export async function fetchBlogPostBySlug(slug: string) {
   const response = await fetch(`${STRAPI_URL}/api/blog-posts?${params}`)
   if (!response.ok) throw new Error('Failed to fetch blog post')
 
-  const json: StrapiResponse<any[]> = await response.json()
+  const json: StrapiResponse<BlogPost[]> = await response.json()
   return json.data[0] || null
 }
 
-export async function fetchCategoryBySlug(slug: string) {
+export async function fetchCategoryBySlug(
+  slug: string,
+): Promise<Category | null> {
   const params = new URLSearchParams({
     'filters[slug][$eq]': slug,
   })
@@ -55,11 +61,11 @@ export async function fetchCategoryBySlug(slug: string) {
   const response = await fetch(`${STRAPI_URL}/api/categories?${params}`)
   if (!response.ok) throw new Error('Failed to fetch category')
 
-  const json: StrapiResponse<any[]> = await response.json()
+  const json: StrapiResponse<Category[]> = await response.json()
   return json.data[0] || null
 }
 
-export async function fetchPostsByCategory(slug: string) {
+export async function fetchPostsByCategory(slug: string): Promise<BlogPost[]> {
   const params = new URLSearchParams({
     'filters[categories][slug][$eq]': slug,
     'populate[0]': 'coverImage',
@@ -69,11 +75,11 @@ export async function fetchPostsByCategory(slug: string) {
   const response = await fetch(`${STRAPI_URL}/api/blog-posts?${params}`)
   if (!response.ok) throw new Error('Failed to fetch posts by category')
 
-  const json: StrapiResponse<any[]> = await response.json()
+  const json: StrapiResponse<BlogPost[]> = await response.json()
   return json.data
 }
 
-export async function fetchTagBySlug(slug: string) {
+export async function fetchTagBySlug(slug: string): Promise<Tag | null> {
   const params = new URLSearchParams({
     'filters[slug][$eq]': slug,
   })
@@ -81,11 +87,11 @@ export async function fetchTagBySlug(slug: string) {
   const response = await fetch(`${STRAPI_URL}/api/tags?${params}`)
   if (!response.ok) throw new Error('Failed to fetch tag')
 
-  const json: StrapiResponse<any[]> = await response.json()
+  const json: StrapiResponse<Tag[]> = await response.json()
   return json.data[0] || null
 }
 
-export async function fetchPostsByTag(slug: string) {
+export async function fetchPostsByTag(slug: string): Promise<BlogPost[]> {
   const params = new URLSearchParams({
     'filters[tags][slug][$eq]': slug,
     'populate[0]': 'coverImage',
@@ -95,6 +101,6 @@ export async function fetchPostsByTag(slug: string) {
   const response = await fetch(`${STRAPI_URL}/api/blog-posts?${params}`)
   if (!response.ok) throw new Error('Failed to fetch posts by tag')
 
-  const json: StrapiResponse<any[]> = await response.json()
+  const json: StrapiResponse<BlogPost[]> = await response.json()
   return json.data
 }

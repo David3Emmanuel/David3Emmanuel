@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { fetchCategoryBySlug, fetchPostsByCategory } from '../lib/strapi'
+import type { Category, BlogPost } from '../lib/types'
 
 export function meta({ data }: Route.MetaArgs) {
   if (!data?.category) {
@@ -16,26 +17,6 @@ export function meta({ data }: Route.MetaArgs) {
       content: data.category.description || `Posts in ${data.category.name}`,
     },
   ]
-}
-
-interface Category {
-  name: string
-  slug: string
-  description?: string
-}
-
-interface BlogPost {
-  id: number
-  documentId: string
-  title: string
-  slug: string
-  excerpt: string
-  coverImage?: {
-    url: string
-    alternativeText?: string
-  }
-  readTime?: number
-  publishedAt: string
 }
 
 export async function loader({ params }: Route.LoaderArgs) {

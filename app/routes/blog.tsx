@@ -15,23 +15,6 @@ export function meta({}: Route.MetaArgs) {
   ]
 }
 
-interface BlogPost {
-  id: number
-  documentId: string
-  title: string
-  slug: string
-  excerpt: string
-  coverImage?: {
-    url: string
-    alternativeText?: string
-  }
-  readTime?: number
-  featured: boolean
-  publishedAt: string
-  categories: Array<{ name: string; slug: string }>
-  tags: Array<{ name: string; slug: string }>
-}
-
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url)
   const page = parseInt(url.searchParams.get('page') || '1')

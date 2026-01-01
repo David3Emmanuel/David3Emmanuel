@@ -21,23 +21,6 @@ export function meta({ data }: Route.MetaArgs) {
   ]
 }
 
-interface BlogPost {
-  id: number
-  documentId: string
-  title: string
-  slug: string
-  excerpt: string
-  content: string
-  coverImage?: {
-    url: string
-    alternativeText?: string
-  }
-  readTime?: number
-  publishedAt: string
-  categories: Array<{ name: string; slug: string }>
-  tags: Array<{ name: string; slug: string }>
-}
-
 export async function loader({ params }: Route.LoaderArgs) {
   const { slug } = params
 

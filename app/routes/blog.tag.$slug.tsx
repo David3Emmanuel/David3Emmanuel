@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { fetchTagBySlug, fetchPostsByTag } from '../lib/strapi'
+import type { Tag, BlogPost } from '../lib/types'
 
 export function meta({ data }: Route.MetaArgs) {
   if (!data?.tag) {
@@ -13,25 +14,6 @@ export function meta({ data }: Route.MetaArgs) {
     { title: `#${data.tag.name} - Blog - David Emmanuel` },
     { name: 'description', content: `Posts tagged with ${data.tag.name}` },
   ]
-}
-
-interface Tag {
-  name: string
-  slug: string
-}
-
-interface BlogPost {
-  id: number
-  documentId: string
-  title: string
-  slug: string
-  excerpt: string
-  coverImage?: {
-    url: string
-    alternativeText?: string
-  }
-  readTime?: number
-  publishedAt: string
 }
 
 export async function loader({ params }: Route.LoaderArgs) {
