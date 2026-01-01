@@ -2,13 +2,15 @@ import type { Route } from './+types/blog'
 import { Link } from 'react-router'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { fetchBlogPosts } from '../lib/strapi'
 
 export function meta({}: Route.MetaArgs) {
   return [
     { title: 'Blog - David Emmanuel' },
     {
       name: 'description',
-      content: 'Read articles and insights from David Emmanuel on web development, game development, and technology.',
+      content:
+        'Read articles and insights from David Emmanuel on web development, game development, and technology.',
     },
   ]
 }
@@ -35,10 +37,9 @@ export async function loader({ request }: Route.LoaderArgs) {
   const page = parseInt(url.searchParams.get('page') || '1')
   const pageSize = 12
 
-  // TODO: Replace with actual Strapi API call
-  const posts: BlogPost[] = []
-  
-  return { posts, page, pageSize, total: 0 }
+  const { posts, pagination } = await fetchBlogPosts(page, pageSize)
+
+  return { posts, page, pageSize, total: pagination?.total || 0 }
 }
 
 export default function Blog({ loaderData }: Route.ComponentProps) {
@@ -56,7 +57,9 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
 
           {posts.length === 0 ? (
             <div className='text-center py-16'>
-              <p className='text-gray-400 text-lg'>No blog posts yet. Check back soon!</p>
+              <p className='text-gray-400 text-lg'>
+                No blog posts yet. Check back soon!
+              </p>
             </div>
           ) : (
             <>
@@ -93,7 +96,9 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
                         </h2>
                       </Link>
                       {post.excerpt && (
-                        <p className='text-gray-400 text-sm mb-4'>{post.excerpt}</p>
+                        <p className='text-gray-400 text-sm mb-4'>
+                          {post.excerpt}
+                        </p>
                       )}
                       <div className='flex justify-between items-center text-sm text-gray-500'>
                         <time dateTime={post.publishedAt}>

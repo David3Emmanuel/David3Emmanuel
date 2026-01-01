@@ -2,6 +2,7 @@ import type { Route } from './+types/blog.$slug'
 import { Link } from 'react-router'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { fetchBlogPostBySlug } from '../lib/strapi'
 
 export function meta({ data }: Route.MetaArgs) {
   if (!data?.post) {
@@ -40,11 +41,9 @@ interface BlogPost {
 export async function loader({ params }: Route.LoaderArgs) {
   const { slug } = params
 
-  // TODO: Replace with actual Strapi API call
-  // const response = await fetch(`${STRAPI_URL}/api/blog-posts?filters[slug][$eq]=${slug}&populate=*`)
-  // const data = await response.json()
-  
-  return { post: null as BlogPost | null }
+  const post = await fetchBlogPostBySlug(slug)
+
+  return { post }
 }
 
 export default function BlogPost({ loaderData }: Route.ComponentProps) {

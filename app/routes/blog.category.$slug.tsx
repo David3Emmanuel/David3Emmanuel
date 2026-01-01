@@ -2,6 +2,7 @@ import type { Route } from './+types/blog.category.$slug'
 import { Link } from 'react-router'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { fetchCategoryBySlug, fetchPostsByCategory } from '../lib/strapi'
 
 export function meta({ data }: Route.MetaArgs) {
   if (!data?.category) {
@@ -40,10 +41,9 @@ interface BlogPost {
 export async function loader({ params }: Route.LoaderArgs) {
   const { slug } = params
 
-  // TODO: Replace with actual Strapi API call
-  const category: Category | null = null
-  const posts: BlogPost[] = []
-  
+  const category = await fetchCategoryBySlug(slug)
+  const posts = await fetchPostsByCategory(slug)
+
   return { category, posts }
 }
 
@@ -95,14 +95,20 @@ export default function CategoryPage({ loaderData }: Route.ComponentProps) {
             Back to Blog
           </Link>
 
-          <h1 className='text-4xl md:text-5xl font-bold mb-4'>{category.name}</h1>
+          <h1 className='text-4xl md:text-5xl font-bold mb-4'>
+            {category.name}
+          </h1>
           {category.description && (
-            <p className='text-xl text-gray-400 mb-12'>{category.description}</p>
+            <p className='text-xl text-gray-400 mb-12'>
+              {category.description}
+            </p>
           )}
 
           {posts.length === 0 ? (
             <div className='text-center py-16'>
-              <p className='text-gray-400 text-lg'>No posts in this category yet.</p>
+              <p className='text-gray-400 text-lg'>
+                No posts in this category yet.
+              </p>
             </div>
           ) : (
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
@@ -127,7 +133,9 @@ export default function CategoryPage({ loaderData }: Route.ComponentProps) {
                       </h2>
                     </Link>
                     {post.excerpt && (
-                      <p className='text-gray-400 text-sm mb-4'>{post.excerpt}</p>
+                      <p className='text-gray-400 text-sm mb-4'>
+                        {post.excerpt}
+                      </p>
                     )}
                     <div className='flex justify-between items-center text-sm text-gray-500'>
                       <time dateTime={post.publishedAt}>

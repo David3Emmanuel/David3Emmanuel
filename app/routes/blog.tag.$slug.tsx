@@ -2,6 +2,7 @@ import type { Route } from './+types/blog.tag.$slug'
 import { Link } from 'react-router'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { fetchTagBySlug, fetchPostsByTag } from '../lib/strapi'
 
 export function meta({ data }: Route.MetaArgs) {
   if (!data?.tag) {
@@ -36,10 +37,9 @@ interface BlogPost {
 export async function loader({ params }: Route.LoaderArgs) {
   const { slug } = params
 
-  // TODO: Replace with actual Strapi API call
-  const tag: Tag | null = null
-  const posts: BlogPost[] = []
-  
+  const tag = await fetchTagBySlug(slug)
+  const posts = await fetchPostsByTag(slug)
+
   return { tag, posts }
 }
 
@@ -92,11 +92,15 @@ export default function TagPage({ loaderData }: Route.ComponentProps) {
           </Link>
 
           <h1 className='text-4xl md:text-5xl font-bold mb-4'>#{tag.name}</h1>
-          <p className='text-xl text-gray-400 mb-12'>Posts tagged with {tag.name}</p>
+          <p className='text-xl text-gray-400 mb-12'>
+            Posts tagged with {tag.name}
+          </p>
 
           {posts.length === 0 ? (
             <div className='text-center py-16'>
-              <p className='text-gray-400 text-lg'>No posts with this tag yet.</p>
+              <p className='text-gray-400 text-lg'>
+                No posts with this tag yet.
+              </p>
             </div>
           ) : (
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
@@ -121,7 +125,9 @@ export default function TagPage({ loaderData }: Route.ComponentProps) {
                       </h2>
                     </Link>
                     {post.excerpt && (
-                      <p className='text-gray-400 text-sm mb-4'>{post.excerpt}</p>
+                      <p className='text-gray-400 text-sm mb-4'>
+                        {post.excerpt}
+                      </p>
                     )}
                     <div className='flex justify-between items-center text-sm text-gray-500'>
                       <time dateTime={post.publishedAt}>
