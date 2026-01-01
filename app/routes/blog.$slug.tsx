@@ -8,17 +8,22 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { fetchBlogPostBySlug } from '../lib/strapi'
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data, params }: Route.MetaArgs) {
   if (!data?.post) {
     return [{ title: 'Post Not Found' }]
   }
 
+  const siteUrl = import.meta.env.VITE_SITE_URL || 'http://localhost:5173'
+  const canonicalUrl = `${siteUrl}/blog/${params.slug}`
+
   return [
     { title: `${data.post.title} - David Emmanuel` },
     { name: 'description', content: data.post.excerpt || '' },
+    { tagName: 'link', rel: 'canonical', href: canonicalUrl },
     { property: 'og:title', content: data.post.title },
     { property: 'og:description', content: data.post.excerpt || '' },
     { property: 'og:type', content: 'article' },
+    { property: 'og:url', content: canonicalUrl },
     ...(data.post.coverImage
       ? [{ property: 'og:image', content: data.post.coverImage.url }]
       : []),
