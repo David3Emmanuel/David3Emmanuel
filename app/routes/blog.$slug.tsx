@@ -1,6 +1,7 @@
 import type { Route } from './+types/blog.$slug'
 import { Link } from 'react-router'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import rehypeSanitize from 'rehype-sanitize'
 import Header from '../components/Header'
@@ -117,7 +118,15 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
           </div>
 
           <div className='prose prose-invert prose-lg max-w-none mb-12'>
-            <ReactMarkdown rehypePlugins={[rehypeRaw, rehypeSanitize]}>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw, rehypeSanitize]}
+              components={{
+                p({ children }) {
+                  return <p style={{ whiteSpace: 'pre-wrap' }}>{children}</p>
+                },
+              }}
+            >
               {post.content}
             </ReactMarkdown>
           </div>
