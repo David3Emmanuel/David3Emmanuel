@@ -1,5 +1,8 @@
 import type { Route } from './+types/blog.$slug'
 import { Link } from 'react-router'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
+import rehypeSanitize from 'rehype-sanitize'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { fetchBlogPostBySlug } from '../lib/strapi'
@@ -113,10 +116,11 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
             {post.readTime && <span>• {post.readTime} min read</span>}
           </div>
 
-          <div
-            className='prose prose-invert prose-lg max-w-none mb-12'
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          <div className='prose prose-invert prose-lg max-w-none mb-12'>
+            <ReactMarkdown rehypePlugins={[rehypeRaw, rehypeSanitize]}>
+              {post.content}
+            </ReactMarkdown>
+          </div>
 
           {post.tags.length > 0 && (
             <div className='border-t border-gray-800 pt-8'>
