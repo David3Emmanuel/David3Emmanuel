@@ -1,6 +1,7 @@
 import type { BlogPost, Category, Tag } from './types'
+import { env } from './env'
 
-const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337'
+const STRAPI_URL = env.STRAPI_URL
 
 interface StrapiResponse<T> {
   data: T

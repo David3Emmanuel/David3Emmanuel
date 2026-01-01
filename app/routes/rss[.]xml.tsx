@@ -1,10 +1,11 @@
 import { fetchBlogPosts } from '~/lib/strapi'
+import { env } from '~/lib/env'
 import type { Route } from './+types/rss[.]xml'
 
 export async function loader({ request }: Route.LoaderArgs) {
   // Fetch the latest 100 posts
   const { posts } = await fetchBlogPosts(1, 100)
-  const domain = process.env.SITE_URL || 'https://david3emmanuel.vercel.app'
+  const domain = env.SITE_URL
 
   const rssItems = posts
     .map((post) => {
