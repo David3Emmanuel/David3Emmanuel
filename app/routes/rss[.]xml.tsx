@@ -39,6 +39,9 @@ export async function loader({ request }: Route.LoaderArgs) {
         <link>${domain}</link>
         <description>Life &amp; Tech</description>
         <language>en-us</language>
+        
+        <atom:link href="${domain}/rss.xml" rel="self" type="application/rss+xml" />
+        
         ${rssItems}
       </channel>
     </rss>`
