@@ -46,6 +46,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
           src='https://www.googletagmanager.com/gtag/js?id=G-CLYBGGRKW9'
         />
         <script
+          async
+          src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9331195387158515'
+          crossOrigin='anonymous'
+        ></script>
+        <script
           dangerouslySetInnerHTML={{
             __html: `
           window.dataLayer = window.dataLayer || [];
