@@ -29,6 +29,12 @@ export async function fetchBlogPosts(page = 1, pageSize = 12) {
   if (!response.ok) throw new Error('Failed to fetch blog posts')
 
   const json: StrapiResponse<BlogPost[]> = await response.json()
+
+  json.data.forEach((post) => {
+    if (post?.coverImage)
+      post.coverImage.url = `${STRAPI_URL}${post.coverImage.url}`
+  })
+
   return {
     posts: json.data,
     pagination: json.meta.pagination,
@@ -49,7 +55,12 @@ export async function fetchBlogPostBySlug(
   if (!response.ok) throw new Error('Failed to fetch blog post')
 
   const json: StrapiResponse<BlogPost[]> = await response.json()
-  return json.data[0] || null
+  const post = json.data[0] || null
+
+  if (post?.coverImage)
+    post.coverImage.url = `${STRAPI_URL}${post.coverImage.url}`
+
+  return post
 }
 
 export async function fetchCategoryBySlug(
@@ -77,6 +88,12 @@ export async function fetchPostsByCategory(slug: string): Promise<BlogPost[]> {
   if (!response.ok) throw new Error('Failed to fetch posts by category')
 
   const json: StrapiResponse<BlogPost[]> = await response.json()
+
+  json.data.forEach((post) => {
+    if (post?.coverImage)
+      post.coverImage.url = `${STRAPI_URL}${post.coverImage.url}`
+  })
+
   return json.data
 }
 
@@ -103,5 +120,11 @@ export async function fetchPostsByTag(slug: string): Promise<BlogPost[]> {
   if (!response.ok) throw new Error('Failed to fetch posts by tag')
 
   const json: StrapiResponse<BlogPost[]> = await response.json()
+
+  json.data.forEach((post) => {
+    if (post?.coverImage)
+      post.coverImage.url = `${STRAPI_URL}${post.coverImage.url}`
+  })
+
   return json.data
 }
