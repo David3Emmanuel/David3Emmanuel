@@ -3,10 +3,20 @@ import { Link } from 'react-router'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
-import rehypeSanitize from 'rehype-sanitize'
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { fetchBlogPostBySlug } from '../lib/strapi'
+
+const customSchema = {
+  ...defaultSchema,
+  tagNames: [...(defaultSchema.tagNames || []), 'video', 'source'],
+  attributes: {
+    ...defaultSchema.attributes,
+    video: ['src', 'controls', 'width', 'height', 'preload', 'poster'],
+    source: ['src', 'type'],
+  },
+}
 
 export function meta({ data, params }: Route.MetaArgs) {
   if (!data?.post) {
@@ -125,10 +135,29 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
           <div className='prose prose-invert prose-lg max-w-none mb-12'>
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeRaw, rehypeSanitize]}
+              rehypePlugins={[rehypeRaw, [rehypeSanitize, customSchema]]}
               components={{
                 p({ children }) {
                   return <p style={{ whiteSpace: 'pre-wrap' }}>{children}</p>
+                },
+                img({ src, alt }) {
+                  return (
+                    <img
+                      src={src}
+                      alt={alt}
+                      className='max-h-[80vh] w-auto mx-auto rounded-lg object-contain'
+                      loading='lazy'
+                    />
+                  )
+                },
+                video({ src }) {
+                  return (
+                    <video
+                      src={src}
+                      controls
+                      className='w-full max-h-[80vh] mx-auto rounded-lg object-contain'
+                    />
+                  )
                 },
               }}
             >
