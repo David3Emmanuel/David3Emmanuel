@@ -23,7 +23,7 @@ I'm open to new opportunities and collaborations. Feel free to reach out through
 - ✉️ Email: [david3emmanuel@gmail.com](mailto:david3emmanuel@gmail.com)
 - 💻 GitHub: [David3Emmanuel](https://github.com/David3Emmanuel)
 - 🔗 LinkedIn: [David3Emmanuel](https://linkedin.com/in/David3Emmanuel)
-- 🐦 Twitter: [@David3Emmnauel](https://twitter.com/David3Emmnauel)
+- 🐦 Twitter: [@David3Emmanuel](https://twitter.com/David3Emmanuel)
 
 ---
 

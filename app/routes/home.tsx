@@ -25,7 +25,7 @@ export function meta({}: Route.MetaArgs) {
     },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:creator', content: '@David3Emmnauel' },
+    { name: 'twitter:creator', content: '@David3Emmanuel' },
     { name: 'twitter:title', content: 'David Emmanuel - Full-Stack Developer' },
     {
       name: 'twitter:description',

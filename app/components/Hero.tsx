@@ -103,7 +103,7 @@ export default function Hero() {
                 </svg>
               </a>
               <a
-                href='https://twitter.com/David3Emmnauel'
+                href='https://twitter.com/David3Emmanuel'
                 target='_blank'
                 rel='noreferrer'
                 className='text-gray-400 hover:text-white transition-colors'

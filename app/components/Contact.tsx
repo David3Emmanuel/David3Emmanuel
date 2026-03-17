@@ -152,7 +152,7 @@ export default function Contact() {
                       </svg>
                     </a>
                     <a
-                      href='https://twitter.com/David3Emmnauel'
+                      href='https://twitter.com/David3Emmanuel'
                       target='_blank'
                       rel='noopener noreferrer'
                       className='text-gray-400 hover:text-blue-400 transition-colors'

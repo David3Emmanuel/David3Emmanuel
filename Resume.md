@@ -3,7 +3,7 @@
 📍 Lagos, Nigeria (Available to relocate)
 📞 +234 7012117811
 📧 [david3emmanuel@gmail.com](mailto:david3emmanuel@gmail.com)
-🔗 [LinkedIn](https://linkedin.com/in/David3Emmanuel) | [GitHub](https://github.com/David3Emmanuel) | [Twitter](https://twitter.com/David3Emmnauel)
+🔗 [LinkedIn](https://linkedin.com/in/David3Emmanuel) | [GitHub](https://github.com/David3Emmanuel) | [Twitter](https://twitter.com/David3Emmanuel)
 
 ---
 
