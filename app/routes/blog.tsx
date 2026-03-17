@@ -73,6 +73,19 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
                           </Link>
                         ))}
                       </div>
+                      {post.tags.length > 0 && (
+                        <div className='flex gap-2 mb-3 flex-wrap'>
+                          {post.tags.map((tag) => (
+                            <Link
+                              key={tag.slug}
+                              to={`/blog/tag/${tag.slug}`}
+                              className='text-xs px-2 py-1 bg-gray-800 text-blue-300 rounded hover:bg-gray-700'
+                            >
+                              #{tag.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                       <Link to={`/blog/${post.slug}`}>
                         <h2 className='text-xl font-bold mb-2 hover:text-blue-400'>
                           {post.title}
