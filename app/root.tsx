@@ -26,10 +26,6 @@ export const links: Route.LinksFunction = () => [
     href: '/favicon.svg',
     type: 'image/svg+xml',
   },
-  {
-    rel: 'canonical',
-    href: 'https://david3emmanuel-portfolio.vercel.app',
-  },
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {

@@ -9,6 +9,13 @@ import Contact from '../components/Contact'
 import Footer from '../components/Footer'
 import ScrollToTop from '../components/ScrollToTop'
 
+export const links: Route.LinksFunction = () => [
+  {
+    rel: 'canonical',
+    href: 'https://david3emmanuel-portfolio.vercel.app',
+  },
+]
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: 'David Emmanuel - Full-Stack Developer' },
