@@ -1,4 +1,4 @@
-import type { BlogPost, Category, Tag } from './types'
+import type { BlogPost, Category, Tag, Comment, PostStat } from './types'
 import { env } from './env'
 
 const STRAPI_URL = env.STRAPI_URL
@@ -127,4 +127,58 @@ export async function fetchPostsByTag(slug: string): Promise<BlogPost[]> {
   })
 
   return json.data
+}
+
+export async function fetchPostStat(slug: string): Promise<PostStat | null> {
+  const params = new URLSearchParams({
+    'filters[postSlug][$eq]': slug,
+  })
+
+  const response = await fetch(`${STRAPI_URL}/api/post-stats?${params}`)
+  if (!response.ok) return null
+
+  const json: StrapiResponse<PostStat[]> = await response.json()
+  return json.data[0] || null
+}
+
+export async function likePost(slug: string): Promise<{ likeCount: number }> {
+  const response = await fetch(`${STRAPI_URL}/api/post-stats/${slug}/like`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  })
+  if (!response.ok) throw new Error('Failed to like post')
+  return response.json()
+}
+
+export async function fetchComments(slug: string): Promise<Comment[]> {
+  const params = new URLSearchParams({
+    'filters[postSlug][$eq]': slug,
+    'filters[approved][$eq]': 'true',
+    sort: 'createdAt:asc',
+  })
+
+  const response = await fetch(`${STRAPI_URL}/api/comments?${params}`)
+  if (!response.ok) return []
+
+  const json: StrapiResponse<Comment[]> = await response.json()
+  return json.data
+}
+
+export async function submitComment(
+  slug: string,
+  data: { name: string; email: string; body: string },
+): Promise<void> {
+  const response = await fetch(`${STRAPI_URL}/api/comments`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      data: {
+        postSlug: slug,
+        name: data.name,
+        email: data.email,
+        body: data.body,
+      },
+    }),
+  })
+  if (!response.ok) throw new Error('Failed to submit comment')
 }

@@ -9,7 +9,7 @@ export default function Hero() {
       {/* Background elements */}
       <div className='absolute inset-0 z-0'>
         {/* Gradient overlay */}
-        <div className='absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-gray-900/80'></div>
+        <div className='absolute inset-0 bg-linear-to-b from-gray-900 via-gray-900 to-gray-900/80'></div>
 
         {/* Grid pattern */}
         <div className='absolute inset-0 opacity-10'>

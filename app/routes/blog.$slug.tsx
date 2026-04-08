@@ -1,12 +1,19 @@
 import type { Route } from './+types/blog.$slug'
-import { Link } from 'react-router'
+import { Link, data } from 'react-router'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { fetchBlogPostBySlug } from '../lib/strapi'
+import LikeButton from '../components/LikeButton'
+import CommentSection from '../components/CommentSection'
+import {
+  fetchBlogPostBySlug,
+  fetchPostStat,
+  fetchComments,
+  submitComment,
+} from '../lib/strapi'
 
 const customSchema = {
   ...defaultSchema,
@@ -43,13 +50,45 @@ export function meta({ data, params }: Route.MetaArgs) {
 export async function loader({ params }: Route.LoaderArgs) {
   const { slug } = params
 
-  const post = await fetchBlogPostBySlug(slug)
+  const [post, postStat, comments] = await Promise.all([
+    fetchBlogPostBySlug(slug),
+    fetchPostStat(slug),
+    fetchComments(slug),
+  ])
 
-  return { post }
+  return { post, likeCount: postStat?.likeCount ?? 0, comments }
+}
+
+export async function action({ request, params }: Route.ActionArgs) {
+  const { slug } = params
+  const formData = await request.formData()
+  const intent = formData.get('intent')
+
+  if (intent === 'comment') {
+    const name = String(formData.get('name') ?? '').trim()
+    const email = String(formData.get('email') ?? '').trim()
+    const body = String(formData.get('body') ?? '').trim()
+
+    if (!name || !email || !body) {
+      return data({ error: 'All fields are required.' }, { status: 400 })
+    }
+
+    try {
+      await submitComment(slug, { name, email, body })
+      return data({ success: true })
+    } catch {
+      return data(
+        { error: 'Failed to submit comment. Please try again.' },
+        { status: 500 },
+      )
+    }
+  }
+
+  return data({ error: 'Unknown action.' }, { status: 400 })
 }
 
 export default function BlogPost({ loaderData }: Route.ComponentProps) {
-  const { post } = loaderData
+  const { post, likeCount, comments } = loaderData
 
   if (!post) {
     return (
@@ -166,7 +205,7 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
           </div>
 
           {post.tags.length > 0 && (
-            <div className='border-t border-gray-800 pt-8'>
+            <div className='border-t border-gray-800 pt-8 mb-8'>
               <div className='flex gap-2 flex-wrap'>
                 <span className='text-gray-400'>Tags:</span>
                 {post.tags.map((tag) => (
@@ -181,6 +220,15 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
               </div>
             </div>
           )}
+
+          <div className='flex items-center gap-3 mb-2'>
+            <LikeButton postSlug={post.slug} initialCount={likeCount} />
+            <span className='text-gray-500 text-sm'>
+              {likeCount === 1 ? '1 like' : `${likeCount} likes`}
+            </span>
+          </div>
+
+          <CommentSection comments={comments} />
         </article>
       </main>
       <Footer />

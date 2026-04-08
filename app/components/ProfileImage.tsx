@@ -9,7 +9,7 @@ export default function ProfileImage({
 }: ProfileImageProps) {
   return (
     <div className='relative'>
-      <div className='w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 p-1'>
+      <div className='w-64 h-64 md:w-80 md:h-80 rounded-full bg-linear-to-br from-blue-500 to-purple-600 p-1'>
         <div className='w-full h-full rounded-full bg-gray-900 flex items-center justify-center overflow-hidden'>
           {imageSrc ? (
             <img

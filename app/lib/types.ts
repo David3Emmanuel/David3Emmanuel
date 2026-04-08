@@ -26,3 +26,16 @@ export interface Tag {
   name: string
   slug: string
 }
+
+export interface Comment {
+  id: number
+  documentId: string
+  name: string
+  body: string
+  createdAt: string
+}
+
+export interface PostStat {
+  postSlug: string
+  likeCount: number
+}
