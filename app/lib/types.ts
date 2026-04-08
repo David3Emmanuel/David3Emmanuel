@@ -36,6 +36,5 @@ export interface Comment {
 }
 
 export interface PostStat {
-  postSlug: string
   likeCount: number
 }

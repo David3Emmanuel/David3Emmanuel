@@ -131,7 +131,7 @@ export async function fetchPostsByTag(slug: string): Promise<BlogPost[]> {
 
 export async function fetchPostStat(slug: string): Promise<PostStat | null> {
   const params = new URLSearchParams({
-    'filters[postSlug][$eq]': slug,
+    'filters[blog_post][slug][$eq]': slug,
   })
 
   const response = await fetch(`${STRAPI_URL}/api/post-stats?${params}`)
@@ -152,7 +152,7 @@ export async function likePost(slug: string): Promise<{ likeCount: number }> {
 
 export async function fetchComments(slug: string): Promise<Comment[]> {
   const params = new URLSearchParams({
-    'filters[postSlug][$eq]': slug,
+    'filters[blog_post][slug][$eq]': slug,
     'filters[approved][$eq]': 'true',
     sort: 'createdAt:asc',
   })
@@ -165,7 +165,7 @@ export async function fetchComments(slug: string): Promise<Comment[]> {
 }
 
 export async function submitComment(
-  slug: string,
+  postDocumentId: string,
   data: { name: string; email: string; body: string },
 ): Promise<void> {
   const response = await fetch(`${STRAPI_URL}/api/comments`, {
@@ -173,10 +173,10 @@ export async function submitComment(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       data: {
-        postSlug: slug,
         name: data.name,
         email: data.email,
         body: data.body,
+        blog_post: postDocumentId,
       },
     }),
   })

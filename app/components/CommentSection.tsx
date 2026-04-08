@@ -3,6 +3,7 @@ import type { Comment } from '../lib/types'
 
 interface CommentSectionProps {
   comments: Comment[]
+  postDocumentId: string
 }
 
 interface ActionData {
@@ -10,7 +11,7 @@ interface ActionData {
   error?: string
 }
 
-export default function CommentSection({ comments }: CommentSectionProps) {
+export default function CommentSection({ comments, postDocumentId }: CommentSectionProps) {
   const navigation = useNavigation()
   const actionData = useActionData() as ActionData | undefined
   const isSubmitting = navigation.state === 'submitting'
@@ -62,6 +63,7 @@ export default function CommentSection({ comments }: CommentSectionProps) {
         ) : (
           <Form method='post' className='space-y-4'>
             <input type='hidden' name='intent' value='comment' />
+            <input type='hidden' name='postDocumentId' value={postDocumentId} />
 
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
               <div>

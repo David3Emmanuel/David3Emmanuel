@@ -65,16 +65,17 @@ export async function action({ request, params }: Route.ActionArgs) {
   const intent = formData.get('intent')
 
   if (intent === 'comment') {
+    const postDocumentId = String(formData.get('postDocumentId') ?? '').trim()
     const name = String(formData.get('name') ?? '').trim()
     const email = String(formData.get('email') ?? '').trim()
     const body = String(formData.get('body') ?? '').trim()
 
-    if (!name || !email || !body) {
+    if (!postDocumentId || !name || !email || !body) {
       return data({ error: 'All fields are required.' }, { status: 400 })
     }
 
     try {
-      await submitComment(slug, { name, email, body })
+      await submitComment(postDocumentId, { name, email, body })
       return data({ success: true })
     } catch {
       return data(
@@ -228,7 +229,7 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
             </span>
           </div>
 
-          <CommentSection comments={comments} />
+          <CommentSection comments={comments} postDocumentId={post.documentId} />
         </article>
       </main>
       <Footer />
