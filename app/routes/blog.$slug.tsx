@@ -48,7 +48,9 @@ export function meta({ data, params }: Route.MetaArgs) {
 }
 
 export function headers() {
-  const strapiUrl = process.env.STRAPI_URL || 'http://localhost:1337'
+  const strapiUrl = (
+    import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337'
+  ).replace(/\/$/, '')
   return {
     'Content-Security-Policy': `frame-ancestors 'self' ${strapiUrl}`,
   }
