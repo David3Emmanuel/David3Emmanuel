@@ -7,4 +7,5 @@ export default [
   route('blog/category/:slug', 'routes/blog.category.$slug.tsx'),
   route('blog/tag/:slug', 'routes/blog.tag.$slug.tsx'),
   route('rss.xml', 'routes/rss[.]xml.tsx'),
+  route('preview', 'routes/preview.tsx'),
 ] satisfies RouteConfig

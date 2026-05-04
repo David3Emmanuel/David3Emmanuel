@@ -43,6 +43,7 @@ export async function fetchBlogPosts(page = 1, pageSize = 12) {
 
 export async function fetchBlogPostBySlug(
   slug: string,
+  status?: string,
 ): Promise<BlogPost | null> {
   const params = new URLSearchParams({
     'filters[slug][$eq]': slug,
@@ -50,6 +51,10 @@ export async function fetchBlogPostBySlug(
     'populate[1]': 'categories',
     'populate[2]': 'tags',
   })
+
+  if (status === 'draft') {
+    params.set('status', 'draft')
+  }
 
   const response = await fetch(`${STRAPI_URL}/api/blog-posts?${params}`)
   if (!response.ok) throw new Error('Failed to fetch blog post')

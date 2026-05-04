@@ -47,16 +47,26 @@ export function meta({ data, params }: Route.MetaArgs) {
   ]
 }
 
-export async function loader({ params }: Route.LoaderArgs) {
+export function headers() {
+  const strapiUrl = process.env.STRAPI_URL || 'http://localhost:1337'
+  return {
+    'Content-Security-Policy': `frame-ancestors 'self' ${strapiUrl}`,
+  }
+}
+
+export async function loader({ params, request }: Route.LoaderArgs) {
   const { slug } = params
 
+  const cookieHeader = request.headers.get('Cookie') ?? ''
+  const isPreview = cookieHeader.includes('preview_mode=draft')
+
   const [post, postStat, comments] = await Promise.all([
-    fetchBlogPostBySlug(slug),
+    fetchBlogPostBySlug(slug, isPreview ? 'draft' : undefined),
     fetchPostStat(slug),
     fetchComments(slug),
   ])
 
-  return { post, likeCount: postStat?.likeCount ?? 0, comments }
+  return { post, likeCount: postStat?.likeCount ?? 0, comments, isPreview }
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
@@ -89,7 +99,7 @@ export async function action({ request, params }: Route.ActionArgs) {
 }
 
 export default function BlogPost({ loaderData }: Route.ComponentProps) {
-  const { post, likeCount, comments } = loaderData
+  const { post, likeCount, comments, isPreview } = loaderData
 
   if (!post) {
     return (
@@ -116,6 +126,11 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
 
   return (
     <div className='min-h-screen bg-gray-950 text-white'>
+      {isPreview && (
+        <div className='bg-yellow-500 text-gray-900 text-sm text-center py-2 px-4 font-medium'>
+          Draft preview. This content is not yet published
+        </div>
+      )}
       <Header />
       <main className='container mx-auto px-4 py-24'>
         <article className='max-w-4xl mx-auto'>
@@ -229,7 +244,10 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
             </span>
           </div>
 
-          <CommentSection comments={comments} postDocumentId={post.documentId} />
+          <CommentSection
+            comments={comments}
+            postDocumentId={post.documentId}
+          />
         </article>
       </main>
       <Footer />
