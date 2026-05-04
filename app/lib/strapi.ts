@@ -30,11 +30,6 @@ export async function fetchBlogPosts(page = 1, pageSize = 12) {
 
   const json: StrapiResponse<BlogPost[]> = await response.json()
 
-  json.data.forEach((post) => {
-    if (post?.coverImage)
-      post.coverImage.url = `${STRAPI_URL}${post.coverImage.url}`
-  })
-
   return {
     posts: json.data,
     pagination: json.meta.pagination,
@@ -61,9 +56,6 @@ export async function fetchBlogPostBySlug(
 
   const json: StrapiResponse<BlogPost[]> = await response.json()
   const post = json.data[0] || null
-
-  if (post?.coverImage)
-    post.coverImage.url = `${STRAPI_URL}${post.coverImage.url}`
 
   return post
 }
