@@ -169,3 +169,27 @@ export async function submitComment(
   })
   if (!response.ok) throw new Error('Failed to submit comment')
 }
+
+export async function fetchAllCategories(): Promise<Category[]> {
+  const response = await fetch(`${STRAPI_URL}/api/categories?sort=name:asc`)
+  if (!response.ok) return []
+  const json: StrapiResponse<Category[]> = await response.json()
+  return json.data
+}
+
+export async function fetchFeaturedPosts(): Promise<BlogPost[]> {
+  const params = new URLSearchParams({
+    'filters[featured][$eq]': 'true',
+    'populate[0]': 'coverImage',
+    'populate[1]': 'categories',
+    'pagination[pageSize]': '3',
+    sort: 'publishedAt:desc',
+  })
+
+  const response = await fetch(`${STRAPI_URL}/api/blog-posts?${params}`)
+  if (!response.ok) return []
+
+  const json: StrapiResponse<BlogPost[]> = await response.json()
+
+  return json.data
+}
