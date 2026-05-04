@@ -86,11 +86,6 @@ export async function fetchPostsByCategory(slug: string): Promise<BlogPost[]> {
 
   const json: StrapiResponse<BlogPost[]> = await response.json()
 
-  json.data.forEach((post) => {
-    if (post?.coverImage)
-      post.coverImage.url = `${STRAPI_URL}${post.coverImage.url}`
-  })
-
   return json.data
 }
 
@@ -117,11 +112,6 @@ export async function fetchPostsByTag(slug: string): Promise<BlogPost[]> {
   if (!response.ok) throw new Error('Failed to fetch posts by tag')
 
   const json: StrapiResponse<BlogPost[]> = await response.json()
-
-  json.data.forEach((post) => {
-    if (post?.coverImage)
-      post.coverImage.url = `${STRAPI_URL}${post.coverImage.url}`
-  })
 
   return json.data
 }
