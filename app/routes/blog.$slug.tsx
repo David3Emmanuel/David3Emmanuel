@@ -198,6 +198,23 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
                   return <p style={{ whiteSpace: 'pre-wrap' }}>{children}</p>
                 },
                 img({ src, alt }) {
+                  const isVideo =
+                    src!.endsWith('.mp4') || src!.endsWith('.webm')
+
+                  if (isVideo)
+                    return (
+                      <video
+                        controls
+                        className='w-full max-h-[80vh] mx-auto rounded-lg object-contain'
+                      >
+                        <source
+                          src={src}
+                          type={`video/${src!.split('.').pop()}`}
+                        />
+                        Your browser does not support the video tag.
+                      </video>
+                    )
+
                   return (
                     <img
                       src={src}
@@ -210,10 +227,15 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
                 video({ src }) {
                   return (
                     <video
-                      src={src}
                       controls
                       className='w-full max-h-[80vh] mx-auto rounded-lg object-contain'
-                    />
+                    >
+                      <source
+                        src={src}
+                        type={`video/${src!.split('.').pop()}`}
+                      />
+                      Your browser does not support the video tag.
+                    </video>
                   )
                 },
               }}
