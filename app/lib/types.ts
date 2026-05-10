@@ -39,3 +39,28 @@ export interface Comment {
 export interface PostStat {
   likeCount: number
 }
+
+export interface Project {
+  id: number
+  title: string
+  description: string
+  demo?: string
+  github?: string
+  techStack: string[]
+  timeline?: string
+  role?: string
+  features?: string[]
+  image?: { url: string; alternativeText?: string }
+  order?: number
+}
+
+export interface ExperienceEntry {
+  id: number
+  title: string
+  company: string
+  period: string
+  description: string[]
+  tech?: string[]
+  type: 'work' | 'activity'
+  order?: number
+}

@@ -8,6 +8,7 @@ import Experience from '../components/Experience'
 import Contact from '../components/Contact'
 import Footer from '../components/Footer'
 import ScrollToTop from '../components/ScrollToTop'
+import { fetchProjects, fetchExperiences } from '../lib/strapi'
 
 export const links: Route.LinksFunction = () => [
   {
@@ -42,7 +43,16 @@ export function meta({}: Route.MetaArgs) {
   ]
 }
 
-export default function Home() {
+export async function loader() {
+  const [projects, experiences] = await Promise.all([
+    fetchProjects(),
+    fetchExperiences(),
+  ])
+  return { projects, experiences }
+}
+
+export default function Home({ loaderData }: Route.ComponentProps) {
+  const { projects, experiences } = loaderData
   return (
     <div className='min-h-screen bg-gray-950 text-white'>
       <Header />
@@ -50,8 +60,8 @@ export default function Home() {
         <Hero />
         <About />
         <Skills />
-        <Projects />
-        <Experience />
+        <Projects projects={projects} />
+        <Experience experiences={experiences} />
         <Contact />
       </main>
       <Footer />

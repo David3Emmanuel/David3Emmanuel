@@ -1,4 +1,12 @@
-import type { BlogPost, Category, Tag, Comment, PostStat } from './types'
+import type {
+  BlogPost,
+  Category,
+  Tag,
+  Comment,
+  PostStat,
+  Project,
+  ExperienceEntry,
+} from './types'
 import { env } from './env'
 
 const STRAPI_URL = env.STRAPI_URL
@@ -168,6 +176,29 @@ export async function submitComment(
     }),
   })
   if (!response.ok) throw new Error('Failed to submit comment')
+}
+
+export async function fetchProjects(): Promise<Project[]> {
+  const params = new URLSearchParams({
+    'populate[0]': 'image',
+    sort: 'order:asc',
+    'pagination[pageSize]': '50',
+  })
+  const response = await fetch(`${STRAPI_URL}/api/projects?${params}`)
+  if (!response.ok) return []
+  const json: StrapiResponse<Project[]> = await response.json()
+  return json.data
+}
+
+export async function fetchExperiences(): Promise<ExperienceEntry[]> {
+  const params = new URLSearchParams({
+    sort: 'order:asc',
+    'pagination[pageSize]': '50',
+  })
+  const response = await fetch(`${STRAPI_URL}/api/experiences?${params}`)
+  if (!response.ok) return []
+  const json: StrapiResponse<ExperienceEntry[]> = await response.json()
+  return json.data
 }
 
 export async function fetchAllCategories(): Promise<Category[]> {

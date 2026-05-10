@@ -1,3 +1,5 @@
+import type { ExperienceEntry } from '../lib/types'
+
 interface ExperienceCardProps {
   title: string
   company: string
@@ -51,59 +53,13 @@ function ExperienceCard({
   )
 }
 
-export default function Experience() {
-  const experiences = [
-    {
-      title: 'Full-Stack Developer',
-      company: 'Delta State Government Farm Trainee Program',
-      period: 'January 2025 – Present',
-      description: [
-        'Collaborating with the Delta State Government to improve agriculture in Delta State',
-        'Designing, creating, and managing two websites (admin portal for ministry and trainee portal)',
-        'Overseeing the development of mobile apps for trainees and supervisors',
-      ],
-    },
-    {
-      title: 'Full-Stack Web Developer',
-      company: 'Hairs by Solomon',
-      period: 'September 2023 – November 2023',
-      description: [
-        'Designed and managed an e-commerce website for a small business',
-        'Delivered project within 1 month through effective client communication',
-      ],
-      tech: ['React', 'Express', 'Firebase'],
-    },
-  ]
-
-  const activities = [
-    {
-      title: 'Trainee',
-      company: 'HatchDev, NITHUB',
-      period: 'April 2024 – December 2024',
-      description: [
-        'Trained in Data Structures and Algorithms, React, NodeJS, Express, PostgreSQL',
-      ],
-    },
-    {
-      title: 'Clan Lead',
-      company: 'GameUp Africa, Maliyo Games',
-      period: 'September 2024 – December 2024',
-      description: [
-        'Led a group within a game development bootcamp',
-        'Facilitated weekly meetings and coordinated with other leads',
-      ],
-    },
-    {
-      title: 'Activity Manager',
-      company: 'The Data Community, UNILAG',
-      period: 'May 2024 – Present',
-      description: [
-        'Organized monthly challenges for 200+ members',
-        'Facilitated the Data Mastery Series (100+ participants)',
-        'Managed a resource drive with ~100 PDFs in data, Python, and ML',
-      ],
-    },
-  ]
+export default function Experience({
+  experiences,
+}: {
+  experiences: ExperienceEntry[]
+}) {
+  const workEntries = experiences.filter((e) => e.type === 'work')
+  const activityEntries = experiences.filter((e) => e.type === 'activity')
 
   return (
     <section id='experience' className='py-20 bg-gray-900/30'>
@@ -119,9 +75,9 @@ export default function Experience() {
               Work Experience
             </h3>
             <div className='space-y-0'>
-              {experiences.map((exp, index) => (
+              {workEntries.map((exp) => (
                 <ExperienceCard
-                  key={index}
+                  key={exp.id}
                   title={exp.title}
                   company={exp.company}
                   period={exp.period}
@@ -135,9 +91,9 @@ export default function Experience() {
           <div>
             <h3 className='text-2xl font-bold text-white mb-8'>Activities</h3>
             <div className='space-y-0'>
-              {activities.map((act, index) => (
+              {activityEntries.map((act) => (
                 <ExperienceCard
-                  key={index}
+                  key={act.id}
                   title={act.title}
                   company={act.company}
                   period={act.period}

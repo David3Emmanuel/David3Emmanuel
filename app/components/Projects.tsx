@@ -1,7 +1,7 @@
+import type { Project } from '../lib/types'
 import ProjectCard from './ProjectCard'
-import { projects } from '../data/projects'
 
-export default function Projects() {
+export default function Projects({ projects }: { projects: Project[] }) {
   return (
     <section id='projects' className='py-20 bg-gray-950'>
       <div className='container mx-auto px-4'>
@@ -10,22 +10,24 @@ export default function Projects() {
           <div className='h-1 w-20 bg-blue-500 mx-auto mt-2'></div>
         </h2>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-          {projects.map((project, index) => (
-            <ProjectCard
-              key={index}
-              title={project.title}
-              description={project.description}
-              demo={project.demo}
-              techStack={project.techStack}
-              timeline={project.timeline}
-              role={project.role}
-              features={project.features}
-              image={project.image}
-              github={project.github}
-            />
-          ))}
-        </div>
+        {projects.length > 0 ? (
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+            {projects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                title={project.title}
+                description={project.description}
+                demo={project.demo}
+                techStack={project.techStack}
+                timeline={project.timeline}
+                role={project.role}
+                features={project.features}
+                image={project.image?.url}
+                github={project.github}
+              />
+            ))}
+          </div>
+        ) : null}
 
         <div className='text-center mt-12'>
           <a
