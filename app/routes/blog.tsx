@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import FeaturedPosts from '../components/FeaturedPosts'
+import PostCard from '../components/PostCard'
 import {
   fetchBlogPosts,
   fetchFeaturedPosts,
@@ -88,66 +89,7 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
                   )}
                   <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
                     {regularPosts.map((post) => (
-                      <article
-                        key={post.id}
-                        className='bg-gray-900 rounded-lg overflow-hidden hover:ring-2 ring-blue-500 transition-all'
-                      >
-                        {post.coverImage && (
-                          <Link to={`/blog/${post.slug}`}>
-                            <img
-                              src={post.coverImage.url}
-                              alt={
-                                post.coverImage.alternativeText || post.title
-                              }
-                              className='w-full h-48 object-cover'
-                            />
-                          </Link>
-                        )}
-                        <div className='p-6'>
-                          <div className='flex gap-2 mb-3 flex-wrap'>
-                            {post.categories.map((category) => (
-                              <Link
-                                key={category.slug}
-                                to={`/blog/category/${category.slug}`}
-                                className='text-xs px-2 py-1 bg-blue-600 rounded hover:bg-blue-700'
-                              >
-                                {category.name}
-                              </Link>
-                            ))}
-                          </div>
-                          {post.tags.length > 0 && (
-                            <div className='flex gap-2 mb-3 flex-wrap'>
-                              {post.tags.map((tag) => (
-                                <Link
-                                  key={tag.slug}
-                                  to={`/blog/tag/${tag.slug}`}
-                                  className='text-xs px-2 py-1 bg-gray-800 text-blue-300 rounded hover:bg-gray-700'
-                                >
-                                  #{tag.name}
-                                </Link>
-                              ))}
-                            </div>
-                          )}
-                          <Link to={`/blog/${post.slug}`}>
-                            <h2 className='text-xl font-bold mb-2 hover:text-blue-400'>
-                              {post.title}
-                            </h2>
-                          </Link>
-                          {post.excerpt && (
-                            <p className='text-gray-400 text-sm mb-4'>
-                              {post.excerpt}
-                            </p>
-                          )}
-                          <div className='flex justify-between items-center text-sm text-gray-500'>
-                            <time dateTime={post.publishedAt}>
-                              {new Date(post.publishedAt).toLocaleDateString()}
-                            </time>
-                            {post.readTime && (
-                              <span>{post.readTime} min read</span>
-                            )}
-                          </div>
-                        </div>
-                      </article>
+                      <PostCard key={post.id} post={post} />
                     ))}
                   </div>
                 </>
