@@ -178,6 +178,12 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
 
           <h1 className='text-4xl md:text-5xl font-bold mb-4'>{post.title}</h1>
 
+          {post.subtitle && (
+            <p className='[font-variant-caps:small-caps] text-gray-300 mb-4'>
+              {post.subtitle}
+            </p>
+          )}
+
           <div className='flex items-center gap-4 text-gray-400 mb-8'>
             <time dateTime={post.publishedAt}>
               {new Date(post.publishedAt).toLocaleDateString('en-US', {
