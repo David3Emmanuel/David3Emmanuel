@@ -121,7 +121,7 @@ export default function Hero() {
           </div>
 
           <div className='flex-1 flex justify-center'>
-            <ProfileImage />
+            <ProfileImage imageSrc='/profile.jpg' />
           </div>
         </div>
       </div>
