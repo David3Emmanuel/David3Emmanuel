@@ -23,6 +23,20 @@ interface StrapiResponse<T> {
   }
 }
 
+/**
+ * Strapi omits relation fields that were not included via `populate`, so a
+ * post can legitimately arrive without `categories`/`tags` even though the
+ * `BlogPost` type declares them. Normalise them to empty arrays here so
+ * consumers (e.g. PostCard) never dereference `undefined`.
+ */
+function normalizePost(post: BlogPost): BlogPost {
+  return {
+    ...post,
+    categories: post.categories ?? [],
+    tags: post.tags ?? [],
+  }
+}
+
 export async function fetchBlogPosts(page = 1, pageSize = 12) {
   const params = new URLSearchParams({
     'pagination[page]': page.toString(),
@@ -39,7 +53,7 @@ export async function fetchBlogPosts(page = 1, pageSize = 12) {
   const json: StrapiResponse<BlogPost[]> = await response.json()
 
   return {
-    posts: json.data,
+    posts: json.data.map(normalizePost),
     pagination: json.meta.pagination,
   }
 }
@@ -65,7 +79,7 @@ export async function fetchBlogPostBySlug(
   const json: StrapiResponse<BlogPost[]> = await response.json()
   const post = json.data[0] || null
 
-  return post
+  return post ? normalizePost(post) : null
 }
 
 export async function fetchCategoryBySlug(
@@ -86,6 +100,8 @@ export async function fetchPostsByCategory(slug: string): Promise<BlogPost[]> {
   const params = new URLSearchParams({
     'filters[categories][slug][$eq]': slug,
     'populate[0]': 'coverImage',
+    'populate[1]': 'categories',
+    'populate[2]': 'tags',
     sort: 'publishedAt:desc',
   })
 
@@ -94,7 +110,7 @@ export async function fetchPostsByCategory(slug: string): Promise<BlogPost[]> {
 
   const json: StrapiResponse<BlogPost[]> = await response.json()
 
-  return json.data
+  return json.data.map(normalizePost)
 }
 
 export async function fetchTagBySlug(slug: string): Promise<Tag | null> {
@@ -113,6 +129,8 @@ export async function fetchPostsByTag(slug: string): Promise<BlogPost[]> {
   const params = new URLSearchParams({
     'filters[tags][slug][$eq]': slug,
     'populate[0]': 'coverImage',
+    'populate[1]': 'categories',
+    'populate[2]': 'tags',
     sort: 'publishedAt:desc',
   })
 
@@ -121,7 +139,7 @@ export async function fetchPostsByTag(slug: string): Promise<BlogPost[]> {
 
   const json: StrapiResponse<BlogPost[]> = await response.json()
 
-  return json.data
+  return json.data.map(normalizePost)
 }
 
 export async function fetchPostStat(slug: string): Promise<PostStat | null> {
@@ -213,6 +231,7 @@ export async function fetchFeaturedPosts(): Promise<BlogPost[]> {
     'filters[featured][$eq]': 'true',
     'populate[0]': 'coverImage',
     'populate[1]': 'categories',
+    'populate[2]': 'tags',
     'pagination[pageSize]': '3',
     sort: 'publishedAt:desc',
   })
@@ -222,5 +241,5 @@ export async function fetchFeaturedPosts(): Promise<BlogPost[]> {
 
   const json: StrapiResponse<BlogPost[]> = await response.json()
 
-  return json.data
+  return json.data.map(normalizePost)
 }

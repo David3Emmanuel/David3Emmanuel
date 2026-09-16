@@ -9,6 +9,8 @@ export default function PostCard({
   featured?: boolean
 }) {
   const Heading = featured ? 'h3' : 'h2'
+  const categories = post.categories ?? []
+  const tags = post.tags ?? []
 
   return (
     <article
@@ -43,7 +45,7 @@ export default function PostCard({
       ) : null}
       <div className='p-6'>
         <div className='flex gap-2 mb-3 flex-wrap'>
-          {post.categories.map((category) => (
+          {categories.map((category) => (
             <Link
               key={category.slug}
               to={`/blog/category/${category.slug}`}
@@ -53,9 +55,9 @@ export default function PostCard({
             </Link>
           ))}
         </div>
-        {post.tags.length > 0 && (
+        {tags.length > 0 && (
           <div className='flex gap-2 mb-3 flex-wrap'>
-            {post.tags.map((tag) => (
+            {tags.map((tag) => (
               <Link
                 key={tag.slug}
                 to={`/blog/tag/${tag.slug}`}
