@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router'
 
+interface NavItem {
+  label: string
+  href: string
+}
+
 export default function Header() {
   const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -21,6 +26,21 @@ export default function Header() {
     }
   }, [])
 
+  const onHome = location.pathname === '/'
+  const section = (hash: string) => (onHome ? hash : `/${hash}`)
+
+  const navItems: NavItem[] = onHome
+    ? [
+        { label: 'About', href: '#about' },
+        { label: 'Skills', href: '#skills' },
+        { label: 'Projects', href: '#projects' },
+        { label: 'Experience', href: '#experience' },
+      ]
+    : [
+        { label: 'Home', href: '/' },
+        { label: 'Projects', href: '/projects' },
+      ]
+
   return (
     <header
       className={`fixed w-full z-50 transition-all duration-300 ${
@@ -39,41 +59,15 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className='hidden md:flex items-center space-x-8'>
-            {location.pathname === '/' ? (
-              <>
-                <a
-                  href='#about'
-                  className='text-gray-300 hover:text-blue-400 transition-colors'
-                >
-                  About
-                </a>
-                <a
-                  href='#skills'
-                  className='text-gray-300 hover:text-blue-400 transition-colors'
-                >
-                  Skills
-                </a>
-                <a
-                  href='#projects'
-                  className='text-gray-300 hover:text-blue-400 transition-colors'
-                >
-                  Projects
-                </a>
-                <a
-                  href='#experience'
-                  className='text-gray-300 hover:text-blue-400 transition-colors'
-                >
-                  Experience
-                </a>
-              </>
-            ) : (
-              <Link
-                to='/'
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
                 className='text-gray-300 hover:text-blue-400 transition-colors'
               >
-                Home
-              </Link>
-            )}
+                {item.label}
+              </a>
+            ))}
             <Link
               to='/blog'
               className='text-gray-300 hover:text-blue-400 transition-colors'
@@ -81,7 +75,7 @@ export default function Header() {
               Blog
             </Link>
             <a
-              href='#contact'
+              href={section('#contact')}
               className='px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors'
             >
               Contact Me
@@ -91,6 +85,7 @@ export default function Header() {
           {/* Mobile Menu Button */}
           <button
             className='md:hidden text-gray-200 focus:outline-none'
+            aria-label='Toggle navigation'
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? (
@@ -132,46 +127,16 @@ export default function Header() {
       {isMenuOpen && (
         <nav className='md:hidden bg-gray-900 border-t border-gray-800 py-4'>
           <div className='container mx-auto px-4 flex flex-col space-y-4'>
-            {location.pathname === '/' ? (
-              <>
-                <a
-                  href='#about'
-                  className='text-gray-300 hover:text-blue-400 transition-colors p-2'
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  About
-                </a>
-                <a
-                  href='#skills'
-                  className='text-gray-300 hover:text-blue-400 transition-colors p-2'
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Skills
-                </a>
-                <a
-                  href='#projects'
-                  className='text-gray-300 hover:text-blue-400 transition-colors p-2'
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Projects
-                </a>
-                <a
-                  href='#experience'
-                  className='text-gray-300 hover:text-blue-400 transition-colors p-2'
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Experience
-                </a>
-              </>
-            ) : (
-              <Link
-                to='/'
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
                 className='text-gray-300 hover:text-blue-400 transition-colors p-2'
                 onClick={() => setIsMenuOpen(false)}
               >
-                Home
-              </Link>
-            )}
+                {item.label}
+              </a>
+            ))}
             <Link
               to='/blog'
               className='text-gray-300 hover:text-blue-400 transition-colors p-2'
@@ -180,7 +145,7 @@ export default function Header() {
               Blog
             </Link>
             <a
-              href='#contact'
+              href={section('#contact')}
               className='inline-block px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors'
               onClick={() => setIsMenuOpen(false)}
             >
