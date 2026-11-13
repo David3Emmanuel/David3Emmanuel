@@ -137,3 +137,9 @@ export interface SkillGroup {
   items: string[]
   order?: number
 }
+
+export interface NewsletterResult {
+  ok: boolean
+  error?: string
+  status?: string
+}

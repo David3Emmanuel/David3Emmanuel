@@ -10,6 +10,7 @@ import type {
   Education,
   Certification,
   SkillGroup,
+  NewsletterResult,
 } from './types'
 import { env } from './env'
 
@@ -305,6 +306,75 @@ export async function fetchAllCategories(): Promise<Category[]> {
   if (!response.ok) return []
   const json: StrapiResponse<Category[]> = await response.json()
   return json.data
+}
+
+export async function fetchAllTags(): Promise<Tag[]> {
+  const params = new URLSearchParams({
+    sort: 'name:asc',
+    'pagination[pageSize]': '100',
+  })
+  const response = await fetch(`${STRAPI_URL}/api/tags?${params}`)
+  if (!response.ok) return []
+  const json: StrapiResponse<Tag[]> = await response.json()
+  return json.data
+}
+
+async function strapiError(response: Response): Promise<string> {
+  try {
+    const body = await response.json()
+    const message = body?.error?.message ?? body?.error ?? body?.message
+    if (typeof message === 'string' && message.trim()) return message
+  } catch {
+    // fall through to the generic message
+  }
+  return 'Something went wrong. Please try again.'
+}
+
+export async function subscribeToNewsletter(
+  email: string,
+  source: string,
+): Promise<NewsletterResult> {
+  try {
+    const response = await fetch(`${STRAPI_URL}/api/newsletter/subscribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source }),
+    })
+
+    if (!response.ok) {
+      return { ok: false, error: await strapiError(response) }
+    }
+
+    return { ok: true, status: 'pending' }
+  } catch {
+    return { ok: false, error: 'Could not reach the subscription service.' }
+  }
+}
+
+export async function confirmSubscription(
+  token: string,
+): Promise<NewsletterResult> {
+  try {
+    const params = new URLSearchParams({ token })
+    const response = await fetch(`${STRAPI_URL}/api/newsletter/confirm?${params}`)
+    if (response.ok) return { ok: true, status: 'confirmed' }
+    return { ok: false, error: await strapiError(response) }
+  } catch {
+    return { ok: false, error: 'Could not reach the subscription service.' }
+  }
+}
+
+export async function unsubscribeFromNewsletter(
+  token: string,
+): Promise<NewsletterResult> {
+  try {
+    const params = new URLSearchParams({ token })
+    const response = await fetch(`${STRAPI_URL}/api/newsletter/unsubscribe?${params}`)
+    if (response.ok) return { ok: true, status: 'unsubscribed' }
+    return { ok: false, error: await strapiError(response) }
+  } catch {
+    return { ok: false, error: 'Could not reach the subscription service.' }
+  }
 }
 
 export async function fetchFeaturedPosts(): Promise<BlogPost[]> {

@@ -1,9 +1,11 @@
 import type { Route } from './+types/blog'
-import { Link } from 'react-router'
+import { data, Link } from 'react-router'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import FeaturedPosts from '../components/FeaturedPosts'
+import NewsletterSignup from '../components/NewsletterSignup'
 import PostCard from '../components/PostCard'
+import { handleNewsletterSubmission } from '../lib/newsletter'
 import {
   fetchBlogPosts,
   fetchFeaturedPosts,
@@ -19,6 +21,16 @@ export function meta({}: Route.MetaArgs) {
         'Read articles and insights from David Emmanuel on web development, game development, and technology.',
     },
   ]
+}
+
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData()
+
+  if (formData.get('intent') === 'newsletter') {
+    return data({ newsletter: await handleNewsletterSubmission(formData) })
+  }
+
+  return data({ error: 'Unknown action.' }, { status: 400 })
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -71,6 +83,8 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
               ))}
             </div>
           )}
+
+          <NewsletterSignup source='blog-index' className='mb-12' />
 
           <FeaturedPosts posts={featuredPosts} />
 

@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import SocialIcon from './SocialIcon'
 import type { Profile } from '../lib/types'
 
@@ -76,6 +76,12 @@ export default function Footer({ profile }: { profile?: Profile | null }) {
             >
               Experience
             </a>
+            <Link
+              to='/newsletter'
+              className='text-gray-400 hover:text-blue-400 transition-colors'
+            >
+              Newsletter
+            </Link>
             <a
               href={anchor('#contact')}
               className='text-gray-400 hover:text-blue-400 transition-colors'

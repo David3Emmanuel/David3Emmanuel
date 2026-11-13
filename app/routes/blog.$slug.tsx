@@ -8,6 +8,8 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import LikeButton from '../components/LikeButton'
 import CommentSection from '../components/CommentSection'
+import NewsletterSignup from '../components/NewsletterSignup'
+import { handleNewsletterSubmission } from '../lib/newsletter'
 import {
   fetchBlogPostBySlug,
   fetchPostStat,
@@ -75,6 +77,10 @@ export async function action({ request, params }: Route.ActionArgs) {
   const { slug } = params
   const formData = await request.formData()
   const intent = formData.get('intent')
+
+  if (intent === 'newsletter') {
+    return data({ newsletter: await handleNewsletterSubmission(formData) })
+  }
 
   if (intent === 'comment') {
     const postDocumentId = String(formData.get('postDocumentId') ?? '').trim()
@@ -266,6 +272,8 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
               </div>
             </div>
           )}
+
+          <NewsletterSignup source='post' className='mb-12' />
 
           <div className='flex items-center gap-3 mb-2'>
             <LikeButton postSlug={post.slug} initialCount={likeCount} />
