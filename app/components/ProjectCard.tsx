@@ -5,6 +5,7 @@ interface ProjectCardProps {
   github?: string
   techStack: string[]
   timeline?: string
+  status?: string
   role?: string
   features?: string[]
   image?: string
@@ -17,6 +18,7 @@ export default function ProjectCard({
   github,
   techStack,
   timeline,
+  status,
   role,
   features,
   image,
@@ -49,7 +51,14 @@ export default function ProjectCard({
             ))}
           </div>
 
-          {timeline && (
+          {status && (
+            <p className='text-sm text-gray-400 mb-1'>
+              <span className='font-medium text-gray-300'>Status:</span>{' '}
+              {status}
+            </p>
+          )}
+
+          {!status && timeline && (
             <p className='text-sm text-gray-400 mb-1'>
               <span className='font-medium text-gray-300'>Timeline:</span>{' '}
               {timeline}

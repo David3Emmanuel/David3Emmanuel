@@ -1,4 +1,99 @@
-export default function About() {
+import type { Certification, Education, Profile } from '../lib/types'
+
+export interface Stat {
+  label: string
+  value: string
+}
+
+function EducationCard({ education }: { education: Education }) {
+  return (
+    <div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700 mt-8'>
+      <h3 className='text-xl font-semibold text-white mb-4'>Education</h3>
+      <div className='space-y-2'>
+        <div>
+          <h4 className='text-lg font-medium text-blue-400'>
+            {education.institution}
+          </h4>
+          <p className='text-gray-300'>
+            {education.degree}
+            {education.period ? ` (${education.period})` : ''}
+          </p>
+          {education.gpa && <p className='text-gray-400'>GPA: {education.gpa}</p>}
+        </div>
+
+        {education.courseworkGroups && education.courseworkGroups.length > 0 && (
+          <div className='mt-4 space-y-3'>
+            <p className='text-gray-300 font-medium'>Relevant Coursework</p>
+            {education.courseworkGroups.map((group) => (
+              <div key={group.title}>
+                <p className='text-sm font-medium text-gray-200'>{group.title}</p>
+                <p className='text-sm text-gray-400'>
+                  {group.courses.join(' · ')}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function CertificationList({
+  title,
+  entries,
+}: {
+  title: string
+  entries: Certification[]
+}) {
+  if (entries.length === 0) return null
+
+  return (
+    <div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700'>
+      <h3 className='text-xl font-semibold text-white mb-4'>{title}</h3>
+      <ul className='space-y-2 text-gray-300'>
+        {entries.map((entry) => {
+          const meta = [entry.issuer, entry.dateLabel].filter(Boolean).join(' · ')
+          const isShortlist = entry.kind === 'shortlist'
+          return (
+            <li key={entry.id} className='flex items-start'>
+              <span className='text-blue-400 mr-2'>•</span>
+              <span>
+                <span className={isShortlist ? 'text-gray-400' : undefined}>
+                  {entry.title}
+                </span>
+                {meta && <span className='text-gray-500'> — {meta}</span>}
+                {isShortlist && (
+                  <span className='text-gray-500'> (shortlisted)</span>
+                )}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
+export default function About({
+  profile,
+  education,
+  certifications,
+  stats,
+}: {
+  profile: Profile | null
+  education: Education | null
+  certifications: Certification[]
+  stats: Stat[]
+}) {
+  if (!profile && !education && certifications.length === 0) return null
+
+  const paragraphs = profile?.bio
+    ? profile.bio.split(/\n{2,}/).filter(Boolean)
+    : []
+  const trainings = certifications.filter((entry) => entry.kind === 'training')
+  const awards = certifications.filter((entry) => entry.kind !== 'training')
+
   return (
     <section id='about' className='py-20 bg-gray-900/30'>
       <div className='container mx-auto px-4'>
@@ -7,157 +102,58 @@ export default function About() {
           <div className='h-1 w-20 bg-blue-500 mx-auto mt-2'></div>
         </h2>
 
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-start'>
           {/* Left Column: About Text */}
           <div className='space-y-6'>
-            <p className='text-gray-300 text-lg'>
-              I'm a Systems Engineering student and passionate Full-Stack
-              Developer focused on creating elegant solutions to complex
-              problems. Based in Lagos, Nigeria, I'm currently pursuing my
-              B.Eng. at the University of Lagos while working on exciting web
-              development projects.
-            </p>
-            <p className='text-gray-300 text-lg'>
-              I'm experienced with modern web technologies, game development,
-              and have a strong foundation in data structures and algorithms.
-            </p>
+            {paragraphs.map((paragraph, index) => (
+              <p key={index} className='text-gray-300 text-lg'>
+                {paragraph}
+              </p>
+            ))}
 
-            <div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700 mt-8'>
-              <h3 className='text-xl font-semibold text-white mb-4'>
-                Education
-              </h3>
-              <div className='space-y-2'>
-                <div>
-                  <h4 className='text-lg font-medium text-blue-400'>
-                    University of Lagos
-                  </h4>
-                  <p className='text-gray-300'>
-                    B.Eng. Systems Engineering (2023 – 2028)
-                  </p>
-                  <p className='text-gray-400'>GPA: 4.97/5.00</p>
-                </div>
-                <p className='text-gray-300 mt-3'>
-                  <span className='font-medium'>Relevant Coursework:</span>{' '}
-                  Statistics, System Design, Data Structures and Algorithms,
-                  Artificial Intelligence
-                </p>
-              </div>
-            </div>
+            {education && <EducationCard education={education} />}
 
-            <div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700'>
-              <h3 className='text-xl font-semibold text-white mb-4'>
-                Certifications & Training
-              </h3>
-              <ul className='space-y-2 text-gray-300'>
-                <li className='flex items-start'>
-                  <span className='text-blue-400 mr-2'>•</span>
-                  <span>HatchDev Training – NITHUB</span>
-                </li>
-                <li className='flex items-start'>
-                  <span className='text-blue-400 mr-2'>•</span>
-                  <span>GameUp Africa – Maliyo Games</span>
-                </li>
-                <li className='flex items-start'>
-                  <span className='text-blue-400 mr-2'>•</span>
-                  <span>PLP Academy – Power Learn Project</span>
-                </li>
-                <li className='flex items-start'>
-                  <span className='text-blue-400 mr-2'>•</span>
-                  <span>Digital For All Challenge – Tech4Dev</span>
-                </li>
-              </ul>
-            </div>
+            <CertificationList
+              title='Certifications & Training'
+              entries={trainings}
+            />
+            <CertificationList
+              title='Scholarships & Awards'
+              entries={awards}
+            />
           </div>
 
-          {/* Right Column: Stats and Info */}
+          {/* Right Column: Stats and Proficiencies */}
           <div className='space-y-8'>
-            {/* Personal Stats Cards */}
-            <div className='grid grid-cols-2 gap-4'>
-              <div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all duration-300'>
-                <div className='text-3xl font-bold text-blue-400 mb-2'>2+</div>
-                <div className='text-gray-300'>Years of Experience</div>
-              </div>
-
-              <div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all duration-300'>
-                <div className='text-3xl font-bold text-blue-400 mb-2'>5+</div>
-                <div className='text-gray-300'>Projects Completed</div>
-              </div>
-
-              <div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all duration-300'>
-                <div className='text-3xl font-bold text-blue-400 mb-2'>4</div>
-                <div className='text-gray-300'>Programming Languages</div>
-              </div>
-
-              <div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all duration-300'>
-                <div className='text-3xl font-bold text-blue-400 mb-2'>3+</div>
-                <div className='text-gray-300'>Certifications</div>
-              </div>
-            </div>
-
-            {/* Technical Proficiency */}
-            <div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700'>
-              <h3 className='text-xl font-semibold text-white mb-4'>
-                Technical Proficiency
-              </h3>
-
-              {/* Frontend */}
-              <div className='mb-4'>
-                <div className='flex justify-between mb-1'>
-                  <span className='text-gray-300'>Frontend Development</span>
-                  <span className='text-blue-400'>90%</span>
-                </div>
-                <div className='w-full bg-gray-700 rounded-full h-2'>
+            {stats.length > 0 && (
+              <div className='grid grid-cols-2 gap-4'>
+                {stats.map((stat) => (
                   <div
-                    className='bg-blue-500 h-2 rounded-full'
-                    style={{ width: '90%' }}
-                  ></div>
-                </div>
+                    key={stat.label}
+                    className='bg-gray-800/50 p-6 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all duration-300'
+                  >
+                    <div className='text-3xl font-bold text-blue-400 mb-2'>
+                      {stat.value}
+                    </div>
+                    <div className='text-gray-300'>{stat.label}</div>
+                  </div>
+                ))}
               </div>
+            )}
 
-              {/* Backend */}
-              <div className='mb-4'>
-                <div className='flex justify-between mb-1'>
-                  <span className='text-gray-300'>Backend Development</span>
-                  <span className='text-blue-400'>85%</span>
-                </div>
-                <div className='w-full bg-gray-700 rounded-full h-2'>
-                  <div
-                    className='bg-blue-500 h-2 rounded-full'
-                    style={{ width: '85%' }}
-                  ></div>
-                </div>
+            {profile?.location && (
+              <div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700'>
+                <h3 className='text-xl font-semibold text-white mb-3'>
+                  Based In
+                </h3>
+                <p className='text-gray-300'>{profile.location}</p>
+                {profile.availability && (
+                  <p className='text-gray-400 text-sm mt-1'>
+                    {profile.availability}
+                  </p>
+                )}
               </div>
-
-              {/* Game Development */}
-              <div className='mb-4'>
-                <div className='flex justify-between mb-1'>
-                  <span className='text-gray-300'>Game Development</span>
-                  <span className='text-blue-400'>75%</span>
-                </div>
-                <div className='w-full bg-gray-700 rounded-full h-2'>
-                  <div
-                    className='bg-blue-500 h-2 rounded-full'
-                    style={{ width: '75%' }}
-                  ></div>
-                </div>
-              </div>
-
-              {/* Algorithms & Data Structures */}
-              <div>
-                <div className='flex justify-between mb-1'>
-                  <span className='text-gray-300'>
-                    Algorithms & Data Structures
-                  </span>
-                  <span className='text-blue-400'>80%</span>
-                </div>
-                <div className='w-full bg-gray-700 rounded-full h-2'>
-                  <div
-                    className='bg-blue-500 h-2 rounded-full'
-                    style={{ width: '80%' }}
-                  ></div>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

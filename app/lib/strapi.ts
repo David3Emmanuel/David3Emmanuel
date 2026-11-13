@@ -6,6 +6,10 @@ import type {
   PostStat,
   Project,
   ExperienceEntry,
+  Profile,
+  Education,
+  Certification,
+  SkillGroup,
 } from './types'
 import { env } from './env'
 
@@ -196,16 +200,57 @@ export async function submitComment(
   if (!response.ok) throw new Error('Failed to submit comment')
 }
 
-export async function fetchProjects(): Promise<Project[]> {
+const PROJECTS_POPULATE = { 'populate[0]': 'image' }
+
+export async function fetchFeaturedProjects(limit = 6): Promise<Project[]> {
   const params = new URLSearchParams({
-    'populate[0]': 'image',
+    ...PROJECTS_POPULATE,
+    'filters[featured][$eq]': 'true',
     sort: 'order:asc',
-    'pagination[pageSize]': '50',
+    'pagination[pageSize]': limit.toString(),
   })
   const response = await fetch(`${STRAPI_URL}/api/projects?${params}`)
   if (!response.ok) return []
   const json: StrapiResponse<Project[]> = await response.json()
   return json.data
+}
+
+export async function fetchProjectsPage({
+  page = 1,
+  pageSize = 12,
+  category = 'all',
+}: {
+  page?: number
+  pageSize?: number
+  category?: string
+}): Promise<{
+  projects: Project[]
+  total: number
+  page: number
+  pageSize: number
+}> {
+  const params = new URLSearchParams({
+    ...PROJECTS_POPULATE,
+    sort: 'order:asc',
+    'pagination[page]': page.toString(),
+    'pagination[pageSize]': pageSize.toString(),
+  })
+  if (category !== 'all') {
+    params.set('filters[category][$eq]', category)
+  }
+
+  const response = await fetch(`${STRAPI_URL}/api/projects?${params}`)
+  if (!response.ok) {
+    return { projects: [], total: 0, page, pageSize }
+  }
+
+  const json: StrapiResponse<Project[]> = await response.json()
+  return {
+    projects: json.data,
+    total: json.meta.pagination?.total ?? json.data.length,
+    page,
+    pageSize,
+  }
 }
 
 export async function fetchExperiences(): Promise<ExperienceEntry[]> {
@@ -216,6 +261,42 @@ export async function fetchExperiences(): Promise<ExperienceEntry[]> {
   const response = await fetch(`${STRAPI_URL}/api/experiences?${params}`)
   if (!response.ok) return []
   const json: StrapiResponse<ExperienceEntry[]> = await response.json()
+  return json.data
+}
+
+export async function fetchProfile(): Promise<Profile | null> {
+  const response = await fetch(`${STRAPI_URL}/api/profile?populate=*`)
+  if (!response.ok) return null
+  const json: StrapiResponse<Profile | null> = await response.json()
+  return json.data ?? null
+}
+
+export async function fetchEducation(): Promise<Education | null> {
+  const response = await fetch(`${STRAPI_URL}/api/education?populate=*`)
+  if (!response.ok) return null
+  const json: StrapiResponse<Education | null> = await response.json()
+  return json.data ?? null
+}
+
+export async function fetchCertifications(): Promise<Certification[]> {
+  const params = new URLSearchParams({
+    sort: 'order:asc',
+    'pagination[pageSize]': '100',
+  })
+  const response = await fetch(`${STRAPI_URL}/api/certifications?${params}`)
+  if (!response.ok) return []
+  const json: StrapiResponse<Certification[]> = await response.json()
+  return json.data
+}
+
+export async function fetchSkillGroups(): Promise<SkillGroup[]> {
+  const params = new URLSearchParams({
+    sort: 'order:asc',
+    'pagination[pageSize]': '100',
+  })
+  const response = await fetch(`${STRAPI_URL}/api/skill-groups?${params}`)
+  if (!response.ok) return []
+  const json: StrapiResponse<SkillGroup[]> = await response.json()
   return json.data
 }
 
